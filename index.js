@@ -14,7 +14,7 @@ connectDB();
 //use route
 app.use("/todo", todoRoutes);
 app.get("/", (req, res) => {
-  return res.send("Welcome");
+  return res.send("Welcome to Yayi's page");
 });
 app.listen(port, () => {
   console.log(`server is running on port ${port}`);
