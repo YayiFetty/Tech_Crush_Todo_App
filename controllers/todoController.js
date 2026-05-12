@@ -29,6 +29,11 @@ const getOneTodo = async (req, res) => {
 const createTodo = async (req, res) => {
   try {
     const { title, details } = req.body;
+    if (!title) {
+      return res.status(400).json({
+        error: "title is required",
+      });
+    }
     const createTodo = await todoModel.create({ title, details });
     return res.status(201).json({
       message: "todo  created",
@@ -38,6 +43,41 @@ const createTodo = async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 };
+
+const createMultipleTodos = async (req, res) => {
+  try {
+    const todos = await todoModel.insertMany(req.body);
+
+    return res.status(201).json({
+      message: "multiple todos created",
+      data: todos,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      error: error.message,
+    });
+  }
+};
+
+// const createTodo = async (req, res) => {
+//   try {
+//     let result;
+
+//     if (Array.isArray(req.body)) {
+//       result = await todoModel.insertMany(req.body);
+//     } else {
+//       result = await todoModel.create(req.body);
+//     }
+
+//     res.status(201).json({
+//       message: "todo(s) created",
+//       data: result,
+//     });
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// };
+
 const updateTodo = async (req, res) => {
   try {
     const { id } = req.params;
@@ -74,4 +114,5 @@ module.exports = {
   createTodo,
   updateTodo,
   deleteTodo,
+  createMultipleTodos,
 };
